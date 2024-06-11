@@ -1,0 +1,55 @@
+This COBOL code demonstrates basic string handling operations. Let's break it down section by section:
+
+**IDENTIFICATION DIVISION**
+
+* **PROGRAM-ID. STRINGHANDLE.** This line simply names the program "STRINGHANDLE".
+
+**DATA DIVISION**
+
+* This section defines the variables the program will use.
+* **WORKING-STORAGE SECTION.** This is where we define variables that the program will manipulate.
+* **01 WS-CNT1 PIC 9(2) VALUE 0.** Defines a numeric variable named WS-CNT1. It can hold two digits (like 42) and is initially set to 0.
+* **01 WS-CNT2 PIC 9(2) VALUE 0.** Similar to WS-CNT1, this is another two-digit numeric variable initialized to 0.
+* **01 WS-STRING PIC X(25) VALUE 'ABCDADADADABVDFDFFAF'.** This defines a character string variable named WS-STRING that can hold up to 25 characters. It's pre-filled with the value "ABCDADADADABVDFDFFAF".
+* **01 WS-STRING-DEST PIC A(30).** This defines a character string variable named WS-STRING-DEST that can hold up to 30 alphabetic characters.
+* **01 WS-STR1 PIC A(15) VALUE 'TUTORIALSPOINT'.** This is another character string, this time holding 15 alphabetic characters and initially containing "TUTORIALSPOINT".
+* **01 WS-STR2 PIC A(7) VALUE 'WELCOME'.** A character string with space for 7 alphabetic characters, starting with the value "WELCOME".
+* **01 WS-STR3 PIC A(7) VALUE 'TO AND'.** Similar to the above, this one holds "TO AND".
+* **01 WS-COUNT PIC 99 VALUE 1.** A two-digit numeric variable named WS-COUNT, initialized to 1.
+* **01 WS-UNSTR PIC A(30) VALUE 'WELCOME TO TUTORIALSPOINT'.** A 30-character alphabetic string variable, pre-filled with "WELCOME TO TUTORIALSPOINT".
+
+**PROCEDURE DIVISION**
+
+This section contains the actual instructions that the program will execute.
+
+* **INSPECT WS-STRING TALLYING WS-CNT1 FOR ALL CHARACTERS.** This line counts the total number of characters in the `WS-STRING` variable and stores the count in `WS-CNT1`.
+* **DISPLAY "WS-CNT1 : "WS-CNT1.** This line displays the value stored in `WS-CNT1` (the total character count) to the user.
+* **INSPECT WS-STRING TALLYING WS-CNT2 FOR ALL 'A'.** This line counts how many times the letter 'A' appears within `WS-STRING` and stores that count in `WS-CNT2`.
+* **DISPLAY "WS-CNT2 : "WS-CNT2.** This line displays the value of `WS-CNT2` (the count of 'A' characters).
+* **DISPLAY "OLD STRING : "WS-STRING.** Shows the original content of `WS-STRING` to the user.
+* **INSPECT WS-STRING REPLACING ALL 'A' BY 'X'.** This line finds all occurrences of the letter 'A' within `WS-STRING` and replaces them with the letter 'X'.
+* **DISPLAY "NEW STRING : "WS-STRING.** This line displays the modified content of `WS-STRING` (after the replacements).
+* **STRING...END-STRING.** This block performs string concatenation (joining strings together):
+* **WS-STR2 DELIMITED BY SIZE** - Take `WS-STR2` ("WELCOME") as is.
+* **WS-STR3 DELIMITED BY SPACE** - Take `WS-STR3` ("TO AND") and stop before the space.
+* **WS-STR1 DELIMITED BY SIZE** - Take `WS-STR1` ("TUTORIALSPOINT") as is.
+* **INTO WS-STRING-DEST** - Put the combined result into the `WS-STRING-DEST` variable.
+* **WITH POINTER WS-COUNT** - Use `WS-COUNT` to keep track of the position within `WS-STRING-DEST`.
+* **ON OVERFLOW DISPLAY 'OVERFLOW!'** - If the concatenated string becomes too long, display an "OVERFLOW!" message.
+* **DISPLAY 'WS-STRING : 'WS-STRING-DEST.** Displays the result of the concatenation stored in `WS-STRING-DEST`.
+* **DISPLAY 'WS-COUNT : 'WS-COUNT.** Displays the final value of the `WS-COUNT` pointer (indicating the length of the concatenated string).
+* **UNSTRING...END-UNSTRING.** This block demonstrates string splitting:
+* **WS-UNSTR DELIMITED BY SPACE** - Take `WS-UNSTR` and split it into parts whenever a space is encountered.
+* **INTO WS-STR3, WS-STR2, WS-STR1** - Put the split parts into the variables `WS-STR3`, `WS-STR2`, and `WS-STR1`, respectively.
+* **DISPLAY 'WS-STR1 : 'WS-STR1.** Displays the content of `WS-STR1` after the split.
+* **DISPLAY 'WS-STR2 : 'WS-STR2.** Displays the content of `WS-STR2` after the split.
+* **DISPLAY 'WS-STR3 : 'WS-STR3.** Displays the content of `WS-STR3` after the split.
+* **STOP RUN.** This line ends the program's execution.
+
+**In summary, this COBOL code provides examples of:**
+
+* Counting characters in a string.
+* Counting specific characters in a string.
+* Replacing characters in a string.
+* Concatenating strings together.
+* Splitting a string into multiple parts.

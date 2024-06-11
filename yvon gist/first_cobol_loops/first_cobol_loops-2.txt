@@ -1,0 +1,46 @@
+## Business Logic Documentation for COBOL Program "LOOPS"
+
+This document outlines the business logic implemented in the provided COBOL program named "LOOPS." The program focuses on demonstrating different looping constructs available in COBOL.
+
+**Program Structure:**
+
+The program primarily utilizes the `PERFORM` verb to execute different paragraphs (akin to functions/procedures) repeatedly based on specific conditions.
+
+**Looping Constructs:**
+
+The program showcases four distinct looping methods:
+
+**1. `PERFORM TIMES`:**
+
+- **Purpose:** Executes a paragraph a predetermined number of times.
+- **Implementation:** `PERFORM B-PARA-TIMES 3 TIMES.`
+- **Logic:** This statement calls the paragraph `B-PARA-TIMES` three consecutive times.
+
+**2. `PERFORM UNTIL`:**
+
+- **Purpose:** Executes a paragraph repeatedly until a specified condition becomes true.
+- **Implementation:** `PERFORM B-PARA-UNTIL WITH TEST AFTER UNTIL WS-CNT > 3.`
+- **Logic:** This statement repeatedly executes `B-PARA-UNTIL`. The condition `WS-CNT > 3` is checked *after* each execution of the paragraph. The loop continues as long as `WS-CNT` is less than or equal to 3.
+
+**3. `PERFORM THRU`:**
+
+- **Purpose:** Executes a sequence of consecutive paragraphs.
+- **Implementation:** `PERFORM C-PARA-THRU THRU E-PARA-THRU.`
+- **Logic:** This statement executes paragraphs from `C-PARA-THRU` to `E-PARA-THRU` sequentially.
+
+**4. `PERFORM VARYING`:**
+
+- **Purpose:** Executes a paragraph repeatedly while incrementing a variable with each iteration.
+- **Implementation:** `PERFORM B-PARA-VARY VARYING WS-A FROM 1 BY 1 UNTIL WS-A = 5.`
+- **Logic:** This statement repeatedly executes `B-PARA-VARY`. The variable `WS-A` starts with the value 1 and increments by 1 after each execution. The loop continues as long as `WS-A` is less than 5.
+
+**Paragraphs/Functions:**
+
+- **`B-PARA-TIMES`:** Displays the text "IN B-PARA-TIMES".
+- **`B-PARA-UNTIL`:** Displays the current value of `WS-CNT` and then increments it by 1.
+- **`C-PARA-THRU`:** Displays the text "IN C-PARA-THRU".
+- **`D-PARA-THRU`:** Displays the text "IN D-PARA-THRU".
+- **`E-PARA-THRU`:** Displays the text "IN E-PARA-THRU".
+- **`B-PARA-VARY`:** Displays the text "IN B-PARA" along with the current value of `WS-A`.
+
+**Note:** The program doesn't implement any specific business process but rather demonstrates the usage of looping constructs for repetitive execution of code blocks. This program can be seen as a foundation for understanding how to implement loops when building more complex applications with actual business logic.

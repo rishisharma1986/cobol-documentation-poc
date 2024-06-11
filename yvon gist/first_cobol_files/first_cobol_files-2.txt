@@ -1,0 +1,52 @@
+This COBOL code defines a program that creates a simple text file named "transactions.txt" and writes a single transaction record into it. Here's a breakdown of the code:
+
+**1. IDENTIFICATION DIVISION**
+
+* **PROGRAM-ID. FILES.** This line gives the program the name "FILES".
+
+**2. ENVIRONMENT DIVISION**
+
+* **INPUT-OUTPUT SECTION.** This section handles interaction with external files.
+* **FILE-CONTROL.**
+* **SELECT TRANSACTIONS ASSIGN TO 'transactions.txt'
+ORGANIZATION IS SEQUENTIAL.**
+This part defines a file named "TRANSACTIONS" and associates it with the physical file "transactions.txt". It specifies that the file is organized sequentially, meaning records are processed one after another in the order they are stored.
+
+**3. DATA DIVISION**
+
+* **FILE SECTION.** This section describes the structure of the data within the file.
+* **FD TRANSACTIONS.** This line starts the definition of the file "TRANSACTIONS".
+* **01 TRANSACTION-STRUCT.** This level 01 entry defines the record structure within the file.
+* **02 UID PIC 9(5).** A 5-digit numeric field for a unique ID.
+* **02 DESC PIC X(25).** A 25-character alphanumeric field for a description.
+* **02 DETAILS.** A group field containing more details.
+* **03 AMOUNT PIC 9(6)V9(2).** A numeric field for an amount with 6 digits before and 2 digits after the decimal point (implied decimal).
+* **03 START-BALANCE PIC 9(6)V9(2).** A numeric field for a starting balance.
+* **03 END-BALANCE PIC 9(6)V9(2).** A numeric field for an ending balance.
+* **02 ACCOUNT-ID PIC 9(7).** A 7-digit numeric field for an account ID.
+* **02 ACCOUNT-HOLDER PIC A(50).** A 50-character alphabetic field for an account holder's name.
+
+* **WORKING-STORAGE SECTION.** This section defines variables used for data manipulation within the program.
+* **01 TRANSACTION-RECORD.** This defines a record structure in memory with the same format as "TRANSACTION-STRUCT".
+* The lines within this record assign initial values to each field:
+* **UID:** 12345
+* **DESC:** 'TEST TRANSACTION'
+* **AMOUNT:** 000124.34
+* **START-BALANCE:** 000177.54
+* **END-BALANCE:** 53.20
+
+**4. PROCEDURE DIVISION**
+
+* **DISPLAY 'WRITING RECORD: 'TRANSACTION-RECORD.** This line displays the contents of the "TRANSACTION-RECORD" before writing it to the file.
+* **OPEN OUTPUT TRANSACTIONS.** This line opens the "TRANSACTIONS" file for output, which will create the file if it doesn't exist or overwrite it if it does.
+* **WRITE TRANSACTION-STRUCT FROM TRANSACTION-RECORD.** This line writes the data from "TRANSACTION-RECORD" into the file "TRANSACTIONS" using the structure defined by "TRANSACTION-STRUCT".
+* **CLOSE TRANSACTIONS.** This line closes the "TRANSACTIONS" file, saving the written data.
+* **STOP RUN.** This line ends the program's execution.
+
+**In summary, this COBOL program:**
+
+1. Defines a file structure for storing transaction data.
+2. Creates a sample transaction record in memory.
+3. Opens a file for writing.
+4. Writes the sample transaction record to the file.
+5. Closes the file.

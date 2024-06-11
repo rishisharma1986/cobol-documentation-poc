@@ -1,0 +1,50 @@
+This COBOL code demonstrates different types of looping constructs. Let's break down the code section by section:
+
+**1. IDENTIFICATION DIVISION**
+
+- This section simply provides basic information about the program, such as its name (LOOPS).
+
+**2. DATA DIVISION**
+
+- This section defines the variables used in the program:
+- `WS-CNT`: A numeric variable with a picture clause of `9(1)`, meaning it can hold a single digit (0-9). It's initialized to 0. This variable will be used as a counter in our loops.
+- `WS-A`: Another single-digit numeric variable, initialized to 0. It will be used in the `VARYING` loop.
+- `WS-Z`: A single-digit numeric variable, initialized to 2. It's not used in the provided code but likely part of a larger program.
+
+**3. PROCEDURE DIVISION**
+
+- This section contains the actual executable code of the program.
+
+- **PERFORM B-PARA-TIMES 3 TIMES.**
+- This line executes the paragraph named `B-PARA-TIMES` three times in a row. This is a basic fixed-iteration loop.
+
+- **PERFORM B-PARA-UNTIL WITH TEST AFTER UNTIL WS-CNT > 3.**
+- This line executes the paragraph named `B-PARA-UNTIL` repeatedly until the condition `WS-CNT > 3` becomes true. The `WITH TEST AFTER` clause specifies that the condition is checked after each execution of the paragraph.
+
+- **PERFORM C-PARA-THRU THRU E-PARA-THRU.**
+- This line executes a sequence of paragraphs starting from `C-PARA-THRU` and continuing through `E-PARA-THRU`. It's important to note that COBOL executes paragraphs in the order they are written, regardless of their names.
+
+- **PERFORM B-PARA-VARY VARYING WS-A FROM 1 BY 1 UNTIL WS-A = 5.**
+- This line demonstrates a `VARYING` loop. It executes the paragraph `B-PARA-VARY` multiple times, incrementing the value of `WS-A` from 1 by 1 until `WS-A` becomes equal to 5.
+
+- **DISPLAY 'WS-A AFTER VARYING ' WS-A.**
+- After the `VARYING` loop completes, this line displays the final value of `WS-A`.
+
+- **STOP RUN.**
+- This statement terminates the program's execution.
+
+**Paragraph Definitions:**
+
+- **B-PARA-TIMES.**
+- This paragraph simply displays the message "IN B-PARA-TIMES".
+
+- **B-PARA-UNTIL.**
+- This paragraph displays the current value of `WS-CNT` and then increments it by 1.
+
+- **C-PARA-THRU, D-PARA-THRU, E-PARA-THRU.**
+- These paragraphs simply display messages indicating which paragraph is currently executing.
+
+- **B-PARA-VARY.**
+- This paragraph displays the message "IN B-PARA" along with the current value of `WS-A`.
+
+**In essence, this COBOL program showcases the different ways to create loops and control the flow of execution in COBOL. It demonstrates how to perform a specific action a set number of times, repeat a block of code until a condition is met, and iterate through a range of values.**
