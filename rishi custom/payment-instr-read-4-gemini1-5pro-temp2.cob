@@ -1,0 +1,141 @@
+IDENTIFICATION DIVISION.
+PROGRAM-ID. FETCH-PAYMENT-INSTR.
+
+*  This program retrieves payment instruction details from the
+*  PAYMENT_INSTRUCTIONS table based on input criteria received
+*  through DFHCOMMAREA.
+
+ENVIRONMENT DIVISION.
+DATA DIVISION.
+
+COPY DFHAIDCPY.
+COPY DFHCOMMAREA.
+COPY PAYINST-CPY.
+
+WORKING-STORAGE SECTION.
+    
+    01  WS-PAYMENT-INSTR.
+        COPY PAYINST-DB2.
+
+    EXEC SQL
+       INCLUDE SQLCA
+    END-EXEC
+
+    77  WS-SQLCODE         PIC S9(9) COMP-3.
+    77  WS-ERRMSG          PIC X(120).
+
+01  WS-INDICATOR-AREA.
+    02  IND-BENE-NAM       PIC S9(4) COMP.
+    02  IND-BENE-ADDR1      PIC S9(4) COMP.
+    02  IND-BENE-ADDR2      PIC S9(4) COMP.
+    02  IND-BENE-ADDR3      PIC S9(4) COMP.
+    02  IND-DEBTOR-NAME     PIC S9(4) COMP.
+    02  IND-DEBTOR-ADDR1    PIC S9(4) COMP.
+    02  IND-DEBTOR-ADDR2    PIC S9(4) COMP.
+    02  IND-DEBTOR-ADDR3    PIC S9(4) COMP.
+    02  IND-INSTR-PTY       PIC S9(4) COMP.
+
+PROCEDURE DIVISION.
+
+    EXEC CICS HANDLE CONDITION
+        ERROR(ERROR-ROUTINE)
+    END-EXEC.
+
+    EXEC CICS GETMAIN SET(ADDRESS OF WS-PAYMENT-INSTR)
+        LENGTH(LENGTH OF WS-PAYMENT-INSTR)
+    END-EXEC.
+
+* Copy data from communication area
+    MOVE DFHCOMMAREA           TO WS-PAYMENT-INSTR.
+
+* Input validation 
+    PERFORM VALIDATE-INPUT
+
+* Retrieve payment instructions
+    EXEC CICS EXEC SQL
+        SELECT 
+            CUST_CTRY,
+            CUST_INSTT,
+            CUST_ID,
+            INSTR_REF_NUM,
+            AC_CTRY,
+            AC_INSTT,
+            AC_NO,
+            AC_PROD_TYP,
+            BENE_NAM,
+            BENE_ADDR1,
+            BENE_ADDR2,
+            BENE_ADDR3,
+            DEBTOR_NAME,
+            DEBTOR_ADDR1,
+            DEBTOR_ADDR2,
+            DEBTOR_ADDR3,
+            INSTR_PTY
+        FROM PAYMENTS.PAYMENT_INSTRUCTIONS
+        WHERE 
+            CUST_CTRY     = :WS-PAYMENT-INSTR.CUST-CTRY
+        AND CUST_INSTT    = :WS-PAYMENT-INSTR.CUST-INSTT
+        AND CUST_ID        = :WS-PAYMENT-INSTR.CUST-ID
+        AND INSTR_REF_NUM = :WS-PAYMENT-INSTR.INSTR-REF-NUM
+        AND AC_CTRY       = :WS-PAYMENT-INSTR.AC-CTRY
+        AND AC_INSTT      = :WS-PAYMENT-INSTR.AC-INSTT
+        AND AC_NO          = :WS-PAYMENT-INSTR.AC-NO
+        AND AC_PROD_TYP    = :WS-PAYMENT-INSTR.AC-PROD-TYP
+        INTO 
+            :WS-PAYMENT-INSTR.CUST-CTRY,
+            :WS-PAYMENT-INSTR.CUST-INSTT,
+            :WS-PAYMENT-INSTR.CUST-ID,
+            :WS-PAYMENT-INSTR.INSTR-REF-NUM,
+            :WS-PAYMENT-INSTR.AC-CTRY,
+            :WS-PAYMENT-INSTR.AC-INSTT,
+            :WS-PAYMENT-INSTR.AC-NO,
+            :WS-PAYMENT-INSTR.AC-PROD-TYP,
+            :WS-PAYMENT-INSTR.BENE-NAM:IND-BENE-NAM,
+            :WS-PAYMENT-INSTR.BENE-ADDR1:IND-BENE-ADDR1,
+            :WS-PAYMENT-INSTR.BENE-ADDR2:IND-BENE-ADDR2,
+            :WS-PAYMENT-INSTR.BENE-ADDR3:IND-BENE-ADDR3,
+            :WS-PAYMENT-INSTR.DEBTOR-NAME:IND-DEBTOR-NAME,
+            :WS-PAYMENT-INSTR.DEBTOR-ADDR1:IND-DEBTOR-ADDR1,
+            :WS-PAYMENT-INSTR.DEBTOR-ADDR2:IND-DEBTOR-ADDR2,
+            :WS-PAYMENT-INSTR.DEBTOR-ADDR3:IND-DEBTOR-ADDR3,
+            :WS-PAYMENT-INSTR.INSTR-PTY:IND-INSTR-PTY
+    END-EXEC.
+
+    IF SQLCODE NOT = 0 
+        THEN
+            MOVE SQLCODE TO WS-SQLCODE
+            MOVE 'Error fetching data' TO WS-ERRMSG
+            PERFORM ERROR-ROUTINE
+    END-IF
+
+*    Process retrieved data (Update application logic here)
+    ...
+
+* Return data
+    MOVE WS-PAYMENT-INSTR TO DFHCOMMAREA
+
+    EXEC CICS RETURN END-EXEC.
+
+
+VALIDATE-INPUT SECTION.
+
+    IF WS-PAYMENT-INSTR.CUST-CTRY = SPACES OR LOW-VALUES
+        MOVE 'Invalid Country Code' TO WS-ERRMSG
+        PERFORM ERROR-ROUTINE
+    END-IF
+
+    IF WS-PAYMENT-INSTR.CUST-INSTT = SPACES OR LOW-VALUES
+        MOVE 'Invalid Institution Code' TO WS-ERRMSG
+        PERFORM ERROR-ROUTINE
+    END-IF
+
+* Similarly, validate other input fields
+    ...
+
+ERROR-ROUTINE SECTION.
+*  Handle error conditions here (Log error, send response code, etc)
+    ...
+
+    EXEC CICS RETURN END-EXEC. 
+
+END PROGRAM FETCH-PAYMENT-INSTR. 
